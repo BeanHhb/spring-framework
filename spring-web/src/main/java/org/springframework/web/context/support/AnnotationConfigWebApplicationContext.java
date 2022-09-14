@@ -216,6 +216,7 @@ public class AnnotationConfigWebApplicationContext extends AbstractRefreshableWe
 		if (beanNameGenerator != null) {
 			reader.setBeanNameGenerator(beanNameGenerator);
 			scanner.setBeanNameGenerator(beanNameGenerator);
+			/** 将扫描到的类定义放到beanDefinitionMap中 */
 			beanFactory.registerSingleton(AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR, beanNameGenerator);
 		}
 

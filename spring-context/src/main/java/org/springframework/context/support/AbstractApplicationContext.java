@@ -556,42 +556,62 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
+			/**
+			 * 前戏：容器刷新前的准备条件
+			 * 1、设置容器启动时间
+			 * 2、设置活跃状态为true
+			 * 3、设置关闭状态为false
+			 * 4、获取Environment对象，并加载当前系统的属性值到Environment对象中
+			 * 5、准备监听器和事件的集合对象，默认为空的集合
+			 */
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			/** 创建容器对象：DefaultListableBeanFactory
+			 * 	加载配置属性值到当前工厂中 */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			/** beanFactory的准备工作，对各种属性进行填充 */
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				/** 开放扩展：子类覆盖方法做额外处理，当前暂无额外扩展 */
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				// Invoke factory processors registered as beans in the context.
+				/** 调用beanFactory后置处理器 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
+				/** 注册bean后置处理器，只是注册，未调用 */
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
+				/** 为上下文初始化message源，不同语言的消息体，国际化处理 */
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				/** 初始化事件监听多路广播器 */
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				/** 开放扩展：留给子类来初始化其他bean */
 				onRefresh();
 
 				// Check for listener beans and register them.
+				/** 从已注册bean中查找listener bean，注册到消息广播器中 */
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				/** 实例化剩下的单实例（非懒加载） */
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
+				/** 完成刷新过程，通知生命周期处理器lifecycleProcessor刷新过程，同时发出ContextRefreshedEvent通知别人 */
 				finishRefresh();
 			}
 
@@ -924,6 +944,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
+		/** 实例化剩下的单例对象 */
 		beanFactory.preInstantiateSingletons();
 	}
 
