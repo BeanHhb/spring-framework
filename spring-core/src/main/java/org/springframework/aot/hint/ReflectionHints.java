@@ -20,12 +20,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.aot.hint.TypeHint.Builder;
@@ -210,6 +208,7 @@ public class ReflectionHints {
 	 * @deprecated in favor of {@link #registerConstructor(Constructor, ExecutableMode)}
 	 */
 	@Deprecated
+	@SuppressWarnings("deprecation")
 	public ReflectionHints registerConstructor(Constructor<?> constructor, Consumer<ExecutableHint.Builder> constructorHint) {
 		return registerType(TypeReference.of(constructor.getDeclaringClass()),
 				typeHint -> typeHint.withConstructor(mapParameters(constructor), constructorHint));
@@ -247,14 +246,14 @@ public class ReflectionHints {
 	 * @deprecated in favor of {@link #registerMethod(Method, ExecutableMode)}
 	 */
 	@Deprecated
-
+	@SuppressWarnings("deprecation")
 	public ReflectionHints registerMethod(Method method, Consumer<ExecutableHint.Builder> methodHint) {
 		return registerType(TypeReference.of(method.getDeclaringClass()),
 				typeHint -> typeHint.withMethod(method.getName(), mapParameters(method), methodHint));
 	}
 
 	private List<TypeReference> mapParameters(Executable executable) {
-		return Arrays.stream(executable.getParameterTypes()).map(TypeReference::of).collect(Collectors.toList());
+		return TypeReference.listOf(executable.getParameterTypes());
 	}
 
 }
