@@ -302,6 +302,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		/** 处理@Import注解 */
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -317,6 +318,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
+		/** 处理@Bean注解 */
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));

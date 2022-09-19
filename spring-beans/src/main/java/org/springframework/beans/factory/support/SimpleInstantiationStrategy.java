@@ -67,6 +67,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 						throw new BeanInstantiationException(clazz, "Specified class is an interface");
 					}
 					try {
+						/** 获取构造器 */
 						constructorToUse = clazz.getDeclaredConstructor();
 						bd.resolvedConstructorOrFactoryMethod = constructorToUse;
 					}

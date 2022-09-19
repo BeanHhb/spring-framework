@@ -36,6 +36,7 @@ import org.springframework.beans.BeansException;
  * @param <T> the object type
  * @see FactoryBean
  */
+/** 函数式接口，仅有一个方法，可传lambda表达式，匿名内部类 */
 @FunctionalInterface
 public interface ObjectFactory<T> {
 
