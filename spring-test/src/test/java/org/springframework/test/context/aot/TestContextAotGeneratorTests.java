@@ -33,12 +33,12 @@ import org.springframework.aot.generate.InMemoryGeneratedFiles;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.TypeReference;
-import org.springframework.aot.test.generate.compile.CompileWithTargetClassAccess;
-import org.springframework.aot.test.generate.compile.TestCompiler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Profiles;
+import org.springframework.core.test.tools.CompileWithForkedClassLoader;
+import org.springframework.core.test.tools.TestCompiler;
 import org.springframework.javapoet.ClassName;
 import org.springframework.test.context.BootstrapUtils;
 import org.springframework.test.context.MergedContextConfiguration;
@@ -80,7 +80,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * @author Sam Brannen
  * @since 6.0
  */
-@CompileWithTargetClassAccess
+@CompileWithForkedClassLoader
 class TestContextAotGeneratorTests extends AbstractAotTests {
 
 	/**
