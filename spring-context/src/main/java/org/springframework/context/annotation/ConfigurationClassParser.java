@@ -179,7 +179,7 @@ class ConfigurationClassParser {
 						"Failed to parse configuration class [" + bd.getBeanClassName() + "]", ex);
 			}
 		}
-
+		/** 其中会调用到AutoConfigurationImportSelector的process、selectImports方法，来完整EnableAutoConfiguration的加载 */
 		this.deferredImportSelectorHandler.process();
 	}
 
@@ -239,6 +239,7 @@ class ConfigurationClassParser {
 		}
 
 		// Recursively process the configuration class and its superclass hierarchy.
+		/** 递归处理查询出启动类包含的所有注解 */
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		do {
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
@@ -303,6 +304,12 @@ class ConfigurationClassParser {
 
 		// Process any @Import annotations
 		/** 处理@Import注解 */
+		/**
+		 * 自动装配原理⑤
+		 * 解析@Import注解时，
+		 * getImports——从主类开始递归解析注解，把所有包含@Import的注解都解析到
+		 * processImports——对Import的类进行分类
+		 * */
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -434,6 +441,7 @@ class ConfigurationClassParser {
 	 * Returns {@code @Import} class, considering all meta-annotations.
 	 */
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
+		/** 获取到@import注解标注的类 */
 		Set<SourceClass> imports = new LinkedHashSet<>();
 		Set<SourceClass> visited = new LinkedHashSet<>();
 		collectImports(sourceClass, imports, visited);
@@ -793,6 +801,7 @@ class ConfigurationClassParser {
 		 */
 		public Iterable<Group.Entry> getImports() {
 			for (DeferredImportSelectorHolder deferredImport : this.deferredImports) {
+				/** springboot中调用DeferredImportSelector的实现为AutoConfigurationImportSelector */
 				this.group.process(deferredImport.getConfigurationClass().getMetadata(),
 						deferredImport.getImportSelector());
 			}
